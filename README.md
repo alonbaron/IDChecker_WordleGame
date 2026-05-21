@@ -132,4 +132,4 @@ Both programs read from stdin and exit on `quit` (ID validator only) or closed s
 
 ## 📝 License
 
-Educational project — no license. Fork freely for your own learning.
+MIT License. See [LICENSE](LICENSE).
