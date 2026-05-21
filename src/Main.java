@@ -88,14 +88,30 @@ class WordleGame {
         System.out.println("You've run out of guesses. The word was: " + secretWord);
     }
     public static String getFeedback(String secretWord, String guess) {
-        char[] feedback = {'_', '_', '_', '_', '_'};
-        for (int i = 0; i < 5; i++) {
-            if (guess.charAt(i) == secretWord.charAt(i)) {
-                feedback[i] = 'G';
-            } else if (secretWord.contains(String.valueOf(guess.charAt(i)))) {
-                feedback[i] = 'Y';
+        char[] result = new char[guess.length()];
+        char[] pool   = secretWord.toCharArray();
+
+        // Pass 1: greens. Consume matched secret letters from the pool.
+        for (int i = 0; i < guess.length(); i++) {
+            if (guess.charAt(i) == pool[i]) {
+                result[i] = 'G';
+                pool[i]   = ' ';   // consumed sentinel — no real word has spaces
             }
         }
-        return new String(feedback);
+
+        // Pass 2: yellows for non-green positions, consuming from the pool.
+        for (int i = 0; i < guess.length(); i++) {
+            if (result[i] == 'G') continue;
+            char c = guess.charAt(i);
+            result[i] = '_';
+            for (int j = 0; j < pool.length; j++) {
+                if (pool[j] == c) {
+                    result[i] = 'Y';
+                    pool[j]   = ' ';
+                    break;
+                }
+            }
+        }
+        return new String(result);
     }
 }
