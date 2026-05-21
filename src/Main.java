@@ -4,26 +4,33 @@ public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         while (true) {
-            System.out.print("Please enter ID number for validation: ");
-            String ID = scanner.nextLine();
-            boolean isNumbersOnly = true;
-            for (char c : ID.toCharArray()) {
-                if (c < '0' || c > '9') {
-                    isNumbersOnly = false;
-                    break;
-                }
+            System.out.print("Enter ID: ");
+            if (!scanner.hasNextLine()) {
+                break;
             }
-            if (!isNumbersOnly) {
-                System.out.println("What you entered is invalid, please enter only numbers. ");
+            String input = scanner.nextLine().trim();
+            if (input.equals("quit")) {
+                break;
+            }
+            if (input.isEmpty()) {
+                System.out.println("Please enter an ID.");
                 continue;
             }
-            while (ID.length() < 9) {
-                ID = "0" + ID;
+            if (input.length() > 9) {
+                System.out.println("ID must be at most 9 digits.");
+                continue;
             }
-            if (isValidIsraeliID(ID)) {
-                System.out.println("ID is valid. ");
+            if (!input.matches("\\d+")) {
+                System.out.println("ID must contain only digits.");
+                continue;
+            }
+            while (input.length() < 9) {
+                input = "0" + input;
+            }
+            if (isValidIsraeliID(input)) {
+                System.out.println("ID is valid.");
             } else {
-                System.out.println("ID is not valid. ");
+                System.out.println("ID is not valid.");
             }
         }
     }
