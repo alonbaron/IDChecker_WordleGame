@@ -1,69 +1,26 @@
 import java.util.Random;
 import java.util.Scanner;
-public class Main {
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        while (true) {
-            System.out.print("Enter ID: ");
-            if (!scanner.hasNextLine()) {
-                break;
-            }
-            String input = scanner.nextLine().trim();
-            if (input.equals("quit")) {
-                break;
-            }
-            if (input.isEmpty()) {
-                System.out.println("Please enter an ID.");
-                continue;
-            }
-            if (input.length() > 9) {
-                System.out.println("ID must be at most 9 digits.");
-                continue;
-            }
-            if (!input.matches("\\d+")) {
-                System.out.println("ID must contain only digits.");
-                continue;
-            }
-            while (input.length() < 9) {
-                input = "0" + input;
-            }
-            if (isValidIsraeliID(input)) {
-                System.out.println("ID is valid.");
-            } else {
-                System.out.println("ID is not valid.");
-            }
-        }
-    }
-    public static boolean isValidIsraeliID(String id) {
-        int sum = 0;
-        for (int i = 0; i < id.length(); i++) {
-            int digit = id.charAt(i) - '0';
-            if (i % 2 == 1) {
-                digit = digit * 2;
-                if (digit > 9) {
-                    digit -= 9;
-                }
-            }
-            sum = sum + digit;
-        }
-        return sum % 10 == 0;
-    }
-}
 
-class WordleGame {
+public class WordleGame {
+    private static final int WORD_LENGTH = 5;
+    private static final int MAX_ATTEMPTS = 6;
+
     public static void main(String[] args) {
         String[] wordArray = {"apple", "grape", "peach", "mango", "berry", "lemon", "melon", "olive", "plumb", "guava"};
         Random random = new Random();
         String secretWord = wordArray[random.nextInt(wordArray.length)];
         Scanner scanner = new Scanner(System.in);
-        System.out.println("You are now starting a game of Wordle! First step is guessing a 5 letter word.");
-        System.out.println("As we are starting the game, you now have 6 guesses, Good luck!");
+        System.out.println("You are now starting a game of Wordle! First step is guessing a " + WORD_LENGTH + " letter word.");
+        System.out.println("As we are starting the game, you now have " + MAX_ATTEMPTS + " guesses, Good luck!");
         int attempts = 0;
-        while (attempts < 6) {
+        while (attempts < MAX_ATTEMPTS) {
             System.out.print("Enter your guess: ");
+            if (!scanner.hasNextLine()) {
+                return;  // EOF — silent exit, parity with IsraeliIDValidator
+            }
             String guess = scanner.nextLine().toLowerCase();
-            if (guess.length() != 5) {
-                System.out.println("The guess is not a 5 letter word, please revisit your guess and try again.");
+            if (guess.length() != WORD_LENGTH) {
+                System.out.println("The guess is not a " + WORD_LENGTH + " letter word, please revisit your guess and try again.");
                 continue;
             }
             boolean found = false;
@@ -74,7 +31,7 @@ class WordleGame {
                 }
             }
             if (!found) {
-                System.out.println("That word is not in the dictionary. Please try a known 5-letter word.");
+                System.out.println("That word is not in the dictionary. Please try a known " + WORD_LENGTH + "-letter word.");
                 continue;
             }
             attempts++;
@@ -87,6 +44,7 @@ class WordleGame {
         }
         System.out.println("You've run out of guesses. The word was: " + secretWord);
     }
+
     public static String getFeedback(String secretWord, String guess) {
         char[] result = new char[guess.length()];
         char[] pool   = secretWord.toCharArray();
