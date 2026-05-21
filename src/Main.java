@@ -66,6 +66,10 @@ class WordleGame {
                     break;
                 }
             }
+            if (!found) {
+                System.out.println("That word is not in the dictionary. Please try a known 5-letter word.");
+                continue;
+            }
             attempts++;
             String feedback = getFeedback(secretWord, guess);
             System.out.println("Feedback: " + feedback);
